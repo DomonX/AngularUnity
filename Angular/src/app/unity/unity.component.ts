@@ -26,9 +26,9 @@ export class UnityComponent implements AfterViewInit, OnDestroy {
       methodName: string,
       value?: string | number
     ) => {};
+    SetFullscreen: (value: number) => {};
   };
 
-  private styleEl: HTMLLinkElement;
   private scriptEl: HTMLScriptElement;
 
   private config: any;
@@ -44,15 +44,17 @@ export class UnityComponent implements AfterViewInit, OnDestroy {
 
   public ngAfterViewInit(): void {
     this.setConfig();
-    this.createLinkRel();
     this.createScript();
 
     const xx = new TestAction('asd');
   }
 
   public ngOnDestroy(): void {
-    this.removeLinkRelIfExists();
     this.removeScriptIfExitsts();
+  }
+
+  public fullScreen(value: boolean): void {
+    this.instance.SetFullscreen(value ? 1 : 0);
   }
 
   private removeScriptIfExitsts(): void {
@@ -74,22 +76,14 @@ export class UnityComponent implements AfterViewInit, OnDestroy {
       )
         .then((unityInstance) => {
           this.instance = unityInstance;
+          console.log(this.instance);
           this.loading.nativeElement.style.display = 'none';
-          this.button.nativeElement.onclick = () => {
-            unityInstance.SetFullscreen(1);
-          };
         })
         .catch((message) => {
           alert(message);
         });
     };
     this.doc.body.appendChild(this.scriptEl);
-  }
-
-  private removeLinkRelIfExists(): void {
-    if (this.styleEl) {
-      this.doc.head.removeChild(this.styleEl);
-    }
   }
 
   private setConfig(): void {
@@ -128,15 +122,5 @@ export class UnityComponent implements AfterViewInit, OnDestroy {
       }, 5000);
     }
     updateBannerVisibility();
-  }
-
-  private createLinkRel(): void {
-    this.styleEl = this.doc.createElement('link');
-    this.styleEl.setAttribute('rel', 'stylesheet');
-    this.styleEl.setAttribute(
-      'href',
-      `assets/${this.path}/TemplateData/style.css`
-    );
-    this.doc.head.appendChild(this.styleEl);
   }
 }

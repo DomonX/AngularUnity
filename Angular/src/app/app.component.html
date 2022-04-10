@@ -1,2 +1,4 @@
-<app-unity #unity path="Unity"></app-unity>
-<button (click)="addDesk()"></button>
+<div style="width: 100vw; height: 100vh">
+  <app-unity #unity path="Unity"></app-unity>
+</div>
+<button (click)="addDesk()">Dodaj biurko</button> {{ position$ | async }}
