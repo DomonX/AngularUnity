@@ -8,11 +8,16 @@ public class Movement : MonoBehaviour
 
     private bool cameraActive = false;
 
+    public float speed = 5.0f;
+
+    public Animator animator;
+
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         cameraActive = true;
+        this.animator = GetComponent<Animator>();
     }
 
 
@@ -50,12 +55,8 @@ public class Movement : MonoBehaviour
     {
         if (cameraActive)
         {
-            // {
-            //     float x = -Input.GetAxis("Mouse Y");
             float y = Input.GetAxis("Mouse X");
             Vector3 currentRotation = transform.rotation.eulerAngles + (new Vector3(0.0f, y, 0.0f) * Time.deltaTime * 350.0f);
-            //     Debug.Log(Mathf.Clamp(currentRotation.x, -90.0f, 90.0f));sa
-            //     currentRotation = new Vector3(currentRotation.x, currentRotation.y, 0.0f);
             transform.rotation = Quaternion.Euler(currentRotation);
         }
     }
@@ -64,25 +65,57 @@ public class Movement : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.W))
         {
-            transform.position += transform.forward * Time.deltaTime * 5.0f;
+            this.animator.SetBool("isWalking", true);
+            transform.position += transform.forward * Time.deltaTime * speed;
+        }
+        else
+        {
+            this.animator.SetBool("isWalking", false);
         }
 
         if (Input.GetKey(KeyCode.S))
         {
-            transform.position += transform.forward * Time.deltaTime * -5.0f;
+            this.animator.SetBool("isWalkingBackwards", true);
+            transform.position += transform.forward * Time.deltaTime * -speed;
+        }
+        else
+        {
+            this.animator.SetBool("isWalkingBackwards", false);
         }
 
         if (Input.GetKey(KeyCode.D))
         {
-            transform.position += transform.right * Time.deltaTime * 5.0f;
+            this.animator.SetBool("isWalkingRight", true);
+            transform.position += transform.right * Time.deltaTime * speed;
+        }
+        else
+        {
+            this.animator.SetBool("isWalkingRight", false);
         }
 
         if (Input.GetKey(KeyCode.A))
         {
-            transform.position += transform.right * Time.deltaTime * -5.0f;
+            this.animator.SetBool("isWalkingLeft", true);
+            transform.position += transform.right * Time.deltaTime * -speed;
+        }
+        else
+        {
+            this.animator.SetBool("isWalkingLeft", false);
         }
 
-        MyMessage(transform.position.ToString());
+
+
+        try
+        {
+
+            MyMessage(transform.position.ToString());
+        }
+        catch
+        {
+
+        }
+
+
 
     }
 

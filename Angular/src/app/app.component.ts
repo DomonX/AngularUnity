@@ -14,6 +14,7 @@ export class AppComponent {
   constructor() {
     this.position$ = UnityService.REGISTRY['myMessage'].subject.asObservable();
   }
+  
   @ViewChild('unity') unity: UnityComponent;
   public addDesk(): void {
     this.unity.instance.SendMessage('Director', 'addDesk');
